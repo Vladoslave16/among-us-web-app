@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Among Us Web</title>
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Иконка сайта -->
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.png') }}">
+    <!-- Socket.IO для реального времени -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <!-- Шапка для всех страниц -->
+    <header>
+        <h1>Among Us Web</h1>
+        {% if 'имя_игрока' in session %}
+            <div class="user">Вы: {{ session['имя_игрока'] }}</div>
+        {% endif %}
+    </header>
 
+    <!-- Сюда подставляется содержимое других страниц -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <p>© 2025 VladiSlave </p>
+    </footer>
+
+    <!-- Подключаем JS -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>
