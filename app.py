@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 import random
 
 app = Flask(name)
-app.secret_key = 'ваш_секретный_ключ'
+app.secret_key = 'мой_супер_ключ_123_@#$%'
 socketio = SocketIO(app)
 
 # Здесь будет основной код из примера (создание комнат, лобби и т.д.)
