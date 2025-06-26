@@ -1,1 +1,71 @@
+{% extends "base.html" %}  <!-- Наследуем шаблон base.html -->
 
+{% block content %}  <!-- Вставляем содержимое в блок content -->
+<div class="game-container">
+    <!-- Карта игры -->
+    <div class="map" id="game-map">
+        <img src="{{ url_for('static', filename='img/map.png') }}" alt="Карта">
+        <!-- Здесь будут отображаться игроки -->
+    </div>
+
+    <!-- Панель игрока -->
+    <div class="player-panel">
+        <h2>Вы: {{ session['имя_игрока'] }}</h2>
+        <div class="role">Роль: <span id="player-role">Загрузка...</span></div>
+        
+        <!-- Кнопки действий -->
+        <div class="actions">
+            <button id="report-btn" class="btn" disabled>Сообщить</button>
+            <button id="tasks-btn" class="btn">Задачи</button>
+            <button id="meeting-btn" class="btn" disabled>Экстренное собрание</button>
+        </div>
+
+        <!-- Чат игры -->
+        <div class="game-chat">
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Ваше сообщение...">
+            <button id="send-btn">Отправить</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}  <!-- Подключаем JS-скрипты -->
+<script>
+    // Подключаемся к Socket.IO
+    const socket = io();
+    const roomCode = "{{ session['код_комнаты'] }}";
+
+    // Получаем роль игрока при загрузке
+    socket.on('connect', () => {
+        socket.emit('get_role', { room: roomCode });
+    });
+
+    // Обновляем интерфейс в зависимости от роли
+    socket.on('role_assigned', (data) => {
+        document.getElementById('player-role').textContent = data.role;
+        
+        // Для предателей активируем особые кнопки
+        if (data.role === 'предатель') {
+            document.getElementById('report-btn').disabled = false;
+            document.getElementById('meeting-btn').disabled = false;
+        }
+    });
+
+    // Чат игры
+    document.getElementById('send-btn').addEventListener('click', () => {
+        const message = document.getElementById('chat-input').value;
+        socket.emit('send_message', { 
+            room: roomCode, 
+            message: message 
+        });
+        document.getElementById('chat-input').value = '';
+    });
+
+    // Получение сообщений
+    socket.on('new_message', (data) => {
+        const chat = document.getElementById('chat-messages');
+        chat.innerHTML += <p><strong>${data.sender}:</strong> ${data.message}</p>;
+    });
+</script>
+{% endblock %}
