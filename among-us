@@ -1,0 +1,13 @@
+among-us-web-app/      # Главная папка проекта
+├── app.py             → Вставляем код сервера (Flask + Socket.IO)
+├── requirements.txt   → Список библиотек (Flask, Socket.IO)
+├── static/            # Папка для стилей, JS и картинок
+│   ├── css/
+│   │   └── style.css  → Стили (CSS)
+│   └── js/
+│       └── game.js    → Логика игры (JavaScript)
+└── templates/         # HTML-страницы
+    ├── base.html      → Главный шаблон
+    ├── index.html     → Стартовая страница
+    ├── lobby.html     → Лобби игры
+    └── game.html      → Игровой экран
