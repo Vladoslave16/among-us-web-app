@@ -1,1 +1,13 @@
+const li = document.createElement('li');
+            li.className = 'player-item';
+            li.textContent = player.name + (player.isCreator ? ' (Создатель)' : '');
+            playersList.appendChild(li);
+        });
+        
+        document.getElementById('players-count').textContent = data.count;
+    });
 
+    // Получаем сообщения чата
+    socket.on('new_lobby_message', (data) => {
+        const chat = document.getElementById('lobby-messages');
+        chat.innerHTML += `<div class="message"><strong>${data.sender}:</strong> ${data.message}</
